@@ -134,7 +134,7 @@ function Navbar({ user, onLogout }) {
                             }}
                             onMouseEnter={(e) => (e.target.style.color = "#3eb39f")}
                             onMouseLeave={(e) => (e.target.style.color = "black")}
-                            onClick={() => navigate("/trips")}
+                            onClick={() => navigate("/trip")}
                         >
                             + Create Trip
                         </button>

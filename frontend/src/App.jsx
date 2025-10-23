@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/login";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 import Dashboard from "./pages/Dashboard";
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Dashboard />} />
         <Route path="/trip" element={<TripPlanner />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </Router>

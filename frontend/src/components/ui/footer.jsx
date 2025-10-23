@@ -8,7 +8,7 @@ function Footer() {
                 color: "white",
                 textAlign: "center",
                 padding: "16px 0",
-                position: "fixed", // stays at bottom
+                position: "fixed",
                 bottom: 0,
                 left: 0,
                 width: "100%",
