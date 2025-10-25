@@ -18,7 +18,6 @@ router.get("/logout", (req, res) => {
         res.redirect("http://localhost:5173/login");
     });
 });
-
 router.get("/user", (req, res) => {
     if (req.isAuthenticated()) {
         res.json(req.user);

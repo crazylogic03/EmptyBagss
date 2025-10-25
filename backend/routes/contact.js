@@ -9,7 +9,6 @@ router.post("/", async (req, res) => {
 
     console.log("📩 New contact form submission:");
     console.log({ name, email, type, message });
-
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",
