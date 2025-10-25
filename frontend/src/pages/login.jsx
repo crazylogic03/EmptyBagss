@@ -15,6 +15,10 @@ function Login() {
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3000/auth/google";
+    };
+
     return (
         <div>
             <div style={{ flex: 1 }}>
@@ -108,6 +112,7 @@ function Login() {
 
                     <button
                         type="button"
+                        onClick={handleGoogleLogin}
                         className="flex items-center justify-center border border-gray-300 rounded py-2 px-4 mt-2 hover:bg-gray-100 transition-colors"
                     >
                         <img

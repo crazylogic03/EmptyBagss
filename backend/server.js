@@ -1,45 +1,37 @@
 const express = require("express");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+const session = require("express-session");
+const passport = require("passport");
+require("dotenv").config();
+
+require("./config/passport");
+
+
+const contactRoutes = require("./routes/contact");
+const authRoutes = require("./routes/auth");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use(session({
+    secret: process.env.SESSION_SECRET || "secret_key",
+    resave: false,
+    saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// POST route for contact form
-app.post("/contact", async (req, res) => {
-    const { name, email, type, message } = req.body;
+app.use("/api/contact", contactRoutes);
+app.use("/auth", authRoutes);
 
-    console.log("📩 New contact form submission:");
-    console.log({ name, email, type, message });
 
-    try {
-        // Create a transporter using Gmail
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: "thrishul4@gmail.com", // replace with your email
-                pass: "simo eotx xlbl fwru",    // replace with your 16-digit app password
-            },
-        });
-        const mailOptions = {
-            from: email,
-            to: "thrishul4@gmail.com",
-            subject: `New ${type} from ${name}`,
-            text: `From: ${name} (${email})\n\nType: ${type}\n\nMessage:\n${message}`,
-        };
-        await transporter.sendMail(mailOptions);
-
-        console.log("✅ Email sent successfully!");
-        res.status(200).json({ message: "Email sent successfully!" });
-    } catch (error) {
-        console.error("❌ Error sending email:", error);
-        res.status(500).json({ error: "Error sending email" });
-    }
+app.get("/", (req, res) => {
+    res.send("🚀 Server is running");
 });
 
-app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhost:${port}`);
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

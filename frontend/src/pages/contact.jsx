@@ -18,18 +18,21 @@ function Contact() {
         setStatus("Sending...");
 
         try {
-            // This will connect to your backend later
-            await fetch("http://localhost:3000/contact", {
+            const response = await fetch("http://localhost:3000/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
 
-            setStatus("✅ Your message has been sent successfully!");
-            setFormData({ name: "", email: "", type: "feedback", message: "" });
+            if (response.ok) {
+                setStatus("✅ Your message has been sent successfully!");
+                setFormData({ name: "", email: "", type: "feedback", message: "" });
+            } else {
+                setStatus("❌Failed to send. Try again later.");
+            }
         } catch (error) {
             console.error(error);
-            setStatus("❌ Something went wrong. Try again later.");
+            setStatus("❌Something went wrong. Try again later.");
         }
     };
 
