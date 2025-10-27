@@ -1,146 +1,168 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/ui/Navbar";
 
 function Dashboard() {
     const [showChat, setShowChat] = useState(false);
     const [startPlace, setStartPlace] = useState("");
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
-    return (
-        <div
-            style={{
-                minHeight: "90vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                padding: "40px 20px",
-            }}
-        >
-            {/* Title */}
-            <h1
-                style={{
-                    fontSize: "42px",
-                    fontWeight: "700",
-                    color: "#222",
-                    marginBottom: "20px",
-                }}
-            >
-                Hey, I'm your personal{" "}
-                <span style={{ color: "#e34a0e" }}>Trip Planner</span>
-            </h1>
+    useEffect(() => {
+        fetch("http://localhost:3000/auth/user", {
+            credentials: "include",
+        })
+            .then((res) => (res.ok ? res.json() : null))
+            .then((data) => setUser(data))
+            .catch(() => setUser(null));
+    }, []);
 
-            {/* Main layout: Chat (left) + Input + Buttons (right) */}
+    const handleLogout = () => {
+        fetch("http://localhost:3000/auth/logout", {
+            method: "GET",
+            credentials: "include",
+        }).then(() => {
+            setUser(null);
+            navigate("/login");
+        });
+    };
+
+    return (
+        <>
+            <Navbar user={user} onLogout={handleLogout} />
             <div
                 style={{
+                    minHeight: "90vh",
                     display: "flex",
-                    alignItems: "flex-start",
+                    flexDirection: "column",
+                    alignItems: "center",
                     justifyContent: "center",
-                    gap: "60px",
-                    width: "100%",
-                    maxWidth: "1200px",
-                    marginTop: "30px",
+                    textAlign: "center",
+                    padding: "40px 20px",
+                    marginTop: "80px", // added so navbar doesn't overlap
                 }}
             >
-                {/* Chat section */}
-                {showChat && <TripChat />}
-
-                {/* Input + Buttons section */}
-                <div
+                {/* Title */}
+                <h1
                     style={{
-                        flex: 1,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        fontSize: "42px",
+                        fontWeight: "700",
+                        color: "#222",
+                        marginBottom: "20px",
                     }}
                 >
+                    Hey, {user ? user.name.split(" ")[0] : "traveler"} 👋 I'm your personal{" "}
+                    <span style={{ color: "#e34a0e" }}>Trip Planner</span>
+                </h1>
+
+                {/* Main layout: Chat (left) + Input + Buttons (right) */}
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        gap: "60px",
+                        width: "100%",
+                        maxWidth: "1200px",
+                        marginTop: "30px",
+                    }}
+                >
+                    {showChat && <TripChat />}
                     <div
                         style={{
+                            flex: 1,
                             display: "flex",
-                            justifyContent: "center",
+                            flexDirection: "column",
                             alignItems: "center",
-                            marginBottom: "40px",
-                            gap: "10px",
-                        }}
-                    >
-                        <input
-                            type="text"
-                            placeholder="Enter your starting place..."
-                            value={startPlace}
-                            onChange={(e) => setStartPlace(e.target.value)}
-                            style={{
-                                width: "420px",
-                                padding: "14px 18px",
-                                fontSize: "16px",
-                                borderRadius: "10px",
-                                border: "1px solid #ccc",
-                                outline: "none",
-                            }}
-                        />
-                        <button
-                            onClick={() => {
-                                if (startPlace.trim()) setShowChat(true);
-                            }}
-                            style={{
-                                backgroundColor: "#e34a0e",
-                                color: "white",
-                                border: "none",
-                                padding: "12px 20px",
-                                borderRadius: "10px",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            Send
-                        </button>
-                    </div>
-
-                    {/* 4 Feature Buttons */}
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
                             justifyContent: "center",
-                            gap: "20px",
                         }}
                     >
-                        <button
-                            onClick={() => navigate("/trip")}
-                            style={buttonStyle("#007bff")}
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginBottom: "40px",
+                                gap: "10px",
+                            }}
                         >
-                            🌍 Create New Trip
-                        </button>
+                            <input
+                                type="text"
+                                placeholder="Enter your starting place..."
+                                value={startPlace}
+                                onChange={(e) => setStartPlace(e.target.value)}
+                                style={{
+                                    width: "420px",
+                                    padding: "14px 18px",
+                                    fontSize: "16px",
+                                    borderRadius: "10px",
+                                    border: "1px solid #ccc",
+                                    outline: "none",
+                                }}
+                            />
+                            <button
+                                onClick={() => {
+                                    if (startPlace.trim()) setShowChat(true);
+                                }}
+                                style={{
+                                    backgroundColor: "#e34a0e",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "12px 20px",
+                                    borderRadius: "10px",
+                                    fontSize: "16px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Send
+                            </button>
+                        </div>
 
-                        <button
-                            onClick={() => navigate("/trip")}
-                            style={buttonStyle("#00c853")}
+                        {/* Feature buttons */}
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                justifyContent: "center",
+                                gap: "20px",
+                            }}
                         >
-                            ✈️ Inspire me where to go
-                        </button>
+                            <button
+                                onClick={() => navigate("/trip")}
+                                style={buttonStyle("#007bff")}
+                            >
+                                🌍 Create New Trip
+                            </button>
 
-                        <button
-                            onClick={() => navigate("/trip")}
-                            style={buttonStyle("#ff6d00")}
-                        >
-                            🏛️ Discover Hidden Gems
-                        </button>
+                            <button
+                                onClick={() => navigate("/trip")}
+                                style={buttonStyle("#00c853")}
+                            >
+                                ✈️ Inspire me where to go
+                            </button>
 
-                        <button
-                            onClick={() => navigate("/trip")}
-                            style={buttonStyle("#ffab00")}
-                        >
-                            🧗 Adventure Destination
-                        </button>
+                            <button
+                                onClick={() => navigate("/trip")}
+                                style={buttonStyle("#ff6d00")}
+                            >
+                                🏛️ Discover Hidden Gems
+                            </button>
+
+                            <button
+                                onClick={() => navigate("/trip")}
+                                style={buttonStyle("#ffab00")}
+                            >
+                                🧗 Adventure Destination
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
-/* Chat component (from your TripChat) */
+/* Chat component */
 function TripChat() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
@@ -152,7 +174,6 @@ function TripChat() {
         setMessages([...messages, newMessage]);
         setInput("");
 
-        // Mock bot reply (frontend only)
         setTimeout(() => {
             setMessages((prev) => [
                 ...prev,
@@ -176,7 +197,6 @@ function TripChat() {
                 overflow: "hidden",
             }}
         >
-            {/* Messages */}
             <div
                 style={{
                     flex: 1,
@@ -207,7 +227,6 @@ function TripChat() {
                 ))}
             </div>
 
-            {/* Input area */}
             <div
                 style={{
                     display: "flex",
@@ -246,7 +265,6 @@ function TripChat() {
     );
 }
 
-/* Trip Buttons Style */
 const buttonStyle = (color) => ({
     backgroundColor: "white",
     color: "#333",

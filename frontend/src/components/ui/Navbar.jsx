@@ -74,6 +74,42 @@ function Navbar({ user, onLogout }) {
 
             {/* Right Side Buttons */}
             <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                {/* Create + Show Trip (Always visible) */}
+                <button
+                    style={{
+                        backgroundColor: "white",
+                        border: "2px solid black",
+                        color: "black",
+                        padding: "8px 16px",
+                        borderRadius: "100px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => (e.target.style.color = "#3eb39f")}
+                    onMouseLeave={(e) => (e.target.style.color = "black")}
+                    onClick={() => navigate("/trip")}
+                >
+                    + Create Trip
+                </button>
+
+                <button
+                    style={{
+                        backgroundColor: "white",
+                        border: "2px solid black",
+                        color: "black",
+                        padding: "8px 16px",
+                        borderRadius: "100px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => (e.target.style.color = "orange")}
+                    onMouseLeave={(e) => (e.target.style.color = "black")}
+                    onClick={() => navigate("/show-trips")}
+                >
+                    Show Trips
+                </button>
+
+                {/* Google Profile + Logout / Login */}
                 {user ? (
                     <>
                         {user.picture ? (
@@ -103,7 +139,7 @@ function Navbar({ user, onLogout }) {
                                     cursor: "pointer",
                                 }}
                             >
-                                {user.name.charAt(0).toUpperCase()}
+                                {user.name?.charAt(0).toUpperCase()}
                             </div>
                         )}
                         <button
@@ -121,40 +157,22 @@ function Navbar({ user, onLogout }) {
                         </button>
                     </>
                 ) : (
-                    <>
-                        <button
-                            style={{
-                                backgroundColor: "white",
-                                border: "2px solid black",
-                                color: "black",
-                                padding: "8px 16px",
-                                borderRadius: "100px",
-                                cursor: "pointer",
-                                transition: "all 0.3s ease",
-                            }}
-                            onMouseEnter={(e) => (e.target.style.color = "#3eb39f")}
-                            onMouseLeave={(e) => (e.target.style.color = "black")}
-                            onClick={() => navigate("/trip")}
-                        >
-                            + Create Trip
-                        </button>
-                        <button
-                            style={{
-                                backgroundColor: "White",
-                                color: "black",
-                                border: "2px solid black",
-                                padding: "8px 16px",
-                                borderRadius: "100px",
-                                cursor: "pointer",
-                                transition: "all 0.3s ease",
-                            }}
-                            onMouseEnter={(e) => (e.target.style.color = "orange")}
-                            onMouseLeave={(e) => (e.target.style.color = "black")}
-                            onClick={() => navigate("/show-trips")}
-                        >
-                            Show Trips
-                        </button>
-                    </>
+                    <button
+                        style={{
+                            backgroundColor: "white",
+                            border: "2px solid black",
+                            color: "black",
+                            padding: "8px 16px",
+                            borderRadius: "100px",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.color = "#3eb39f")}
+                        onMouseLeave={(e) => (e.target.style.color = "black")}
+                        onClick={() => navigate("/login")}
+                    >
+                        Login
+                    </button>
                 )}
             </div>
         </div>

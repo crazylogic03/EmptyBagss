@@ -15,8 +15,10 @@ function Login() {
         }
     };
 
+    // ✅ Updated Google OAuth login
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3000/auth/google";
+        // open Google login flow in same tab
+        window.open("http://localhost:3000/auth/google", "_self");
     };
 
     return (
@@ -110,6 +112,7 @@ function Login() {
                         {isLogin ? 'Login' : 'Sign Up'}
                     </button>
 
+                    {/* ✅ Google OAuth login */}
                     <button
                         type="button"
                         onClick={handleGoogleLogin}

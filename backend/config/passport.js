@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const User = require("../models/user");
 require("dotenv").config();
 
 passport.use(
@@ -9,17 +10,32 @@ passport.use(
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: "http://localhost:3000/auth/google/callback",
         },
-        (accessToken, refreshToken, profile, done) => {
-            // Here you can store user info in DB if needed
-            return done(null, profile);
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                let user = await User.findOne({ googleId: profile.id });
+                if (!user) {
+                    user = await User.create({
+                        googleId: profile.id,
+                        name: profile.displayName,
+                        email: profile.emails[0].value,
+                        picture: profile.photos[0].value,
+                    });
+                }
+                return done(null, user);
+            } catch (err) {
+                console.error("Google Auth Error:", err);
+                return done(err, null);
+            }
         }
     )
 );
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-    done(null, user);
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err, null);
+    }
 });
