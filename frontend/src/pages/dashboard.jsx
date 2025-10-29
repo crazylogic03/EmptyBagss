@@ -162,7 +162,6 @@ function Dashboard() {
     );
 }
 
-/* Chat component */
 function TripChat() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
